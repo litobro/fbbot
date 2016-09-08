@@ -35,14 +35,16 @@ class fbbot(fbchat.Client):
                 if words[1] in self.user_keyword_vector.keys():
                     plugin = self.pluginManager.getPluginByName(self.user_keyword_vector[words[1]])
                     response = plugin.plugin_object.user_keyword_vector[words[1]](words)
-                    sent = self.send(author_id, response)
-                    if sent:
-                         print("Sent", response, "to", author_id)
-                    else:
-                         print("Failed", response, "to", author_id)
                 else:
-                    return "Unrecognized Command"
+                    response = "Unrecognized Command"
 
+                #Send the response
+                sent = self.send(author_id, response)
+                if sent:
+                     print("Sent", response, "to", author_id)
+                else:
+                     print("Failed", response, "to", author_id)
+ 
 with open("config.yaml", "r") as stream:
     try:
         pair = yaml.load(stream)
