@@ -41,7 +41,7 @@ class fbbot(fbchat.Client):
                     else:
                          print("Failed", response, "to", author_id)
                 else:
-                    print("Unrecognized Command")
+                    return "Unrecognized Command"
 
 with open("config.yaml", "r") as stream:
     try:
