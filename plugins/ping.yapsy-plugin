@@ -1,0 +1,8 @@
+[Core]
+Name = Ping
+Module = ping
+
+[Documentation]
+Description = Simple pong back plugin
+Author = Thomas Dang
+Version = 2016.09.08.a
