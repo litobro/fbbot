@@ -3,7 +3,8 @@ from yapsy.PluginManager import PluginManager
 
 class fbbot(fbchat.Client):
     pluginManager = None
-    keyword_vector = {}
+    user_keyword_vector = {}
+    admin_keyword_vector = {}
 
     def __init__(self, email, password, debug=True, user_agent=None):
         fbchat.Client.__init__(self, email, password, debug, user_agent) 
@@ -11,9 +12,14 @@ class fbbot(fbchat.Client):
         self.pluginManager.setPluginPlaces(['plugins'])
         self.pluginManager.collectPlugins()
 
+        #Register all the keywords and the name of their respective plugin
         for plugin in self.pluginManager.getAllPlugins():
             try:
-                pass #TODO: Implement actual plugin loading of keywords and recognize them below in on_message
+                self.pluginManager.activatePluginByName(plugin.name)
+                for key in plugin.plugin_object.user_keyword_vector.keys():
+                    self.user_keyword_vector[key] = plugin.name
+                for key in plugin.plugin_object.admin_keyword_vector.keys():
+                    self.admin_keyword_vector[key] = plugin.name
             except Exception as ex:
                 print(ex)
 
@@ -25,7 +31,17 @@ class fbbot(fbchat.Client):
         if str(author_id) != str(self.uid):
             #trigger word
             if message.startswith("/bot"):
-                pass #TODO: Implement plugin system for commands here
+                words = message.split()
+                if words[1] in self.user_keyword_vector.keys():
+                    plugin = self.pluginManager.getPluginByName(self.user_keyword_vector[words[1]])
+                    response = plugin.plugin_object.user_keyword_vector[words[1]](words)
+                    sent = self.send(author_id, response)
+                    if sent:
+                         print("Sent", response, "to", author_id)
+                    else:
+                         print("Failed", response, "to", author_id)
+                else:
+                    print("Unrecognized Command")
 
 with open("config.yaml", "r") as stream:
     try:

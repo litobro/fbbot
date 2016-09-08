@@ -1,0 +1,8 @@
+[Core]
+Name = Echo
+Module = echo
+
+[Documentation]
+Description = Simple echo back plugin
+Author = Thomas Dang
+Version = 2016.09.03.a
